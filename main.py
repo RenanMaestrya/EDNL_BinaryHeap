@@ -1,6 +1,5 @@
 import pygame
 
-# Configurações básicas do Pygame
 pygame.init()
 WIDTH, HEIGHT = 800, 600
 window = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -13,6 +12,7 @@ font = pygame.font.Font(None, 36)
 class BinaryHeap:
     def __init__(self):
         self.heap = []
+        self.sorted_heap = []
 
     def insert(self, value):
         self.heap.append(value)
@@ -31,7 +31,7 @@ class BinaryHeap:
     def up(self, index):
         while index > 0:
             parent = (index - 1) // 2
-            if self.heap[index] < self.heap[parent]:
+            if self.heap[index] > self.heap[parent]:  
                 self.heap[index], self.heap[parent] = self.heap[parent], self.heap[index]
                 index = parent
             else:
@@ -42,42 +42,42 @@ class BinaryHeap:
         while True:
             left_child = 2 * index + 1
             right_child = 2 * index + 2
-            smallest = index
+            largest = index
 
-            if left_child <= last_index and self.heap[left_child] < self.heap[smallest]:
-                smallest = left_child
-            if right_child <= last_index and self.heap[right_child] < self.heap[smallest]:
-                smallest = right_child
+            if left_child <= last_index and self.heap[left_child] > self.heap[largest]:  
+                largest = left_child
+            if right_child <= last_index and self.heap[right_child] > self.heap[largest]:  
+                largest = right_child
 
-            if smallest != index:
-                self.heap[index], self.heap[smallest] = self.heap[smallest], self.heap[index]
-                index = smallest
+            if largest != index:
+                self.heap[index], self.heap[largest] = self.heap[largest], self.heap[index]
+                index = largest
             else:
                 break
 
     def heap_sort(self):
-        sorted_heap = self.heap[:]
-        n = len(sorted_heap)
+        self.sorted_heap = self.heap[:]
+        n = len(self.sorted_heap)
 
         for i in range(n // 2 - 1, -1, -1):
-            self._down_copy(sorted_heap, n, i)
+            self._down_copy(self.sorted_heap, n, i)
 
         for i in range(n - 1, 0, -1):
-            sorted_heap[0], sorted_heap[i] = sorted_heap[i], sorted_heap[0]
-            self.display_heap(sorted_heap)  
+            self.sorted_heap[0], self.sorted_heap[i] = self.sorted_heap[i], self.sorted_heap[0]
+            self.display_heap(self.sorted_heap)  
             pygame.time.delay(500)  
-            self._down_copy(sorted_heap, i, 0)
+            self._down_copy(self.sorted_heap, i, 0)
 
-        print("Heap ordenado:", sorted_heap)
+        print("Heap ordenado:", self.sorted_heap)
 
     def _down_copy(self, heap, n, index):
         largest = index
         left = 2 * index + 1
         right = 2 * index + 2
 
-        if left < n and heap[left] < heap[largest]:
+        if left < n and heap[left] > heap[largest]:  
             largest = left
-        if right < n and heap[right] < heap[largest]:
+        if right < n and heap[right] > heap[largest]:  
             largest = right
 
         if largest != index:
@@ -113,14 +113,14 @@ class BinaryHeap:
     def change_priority(self, index, new_value):
         old_value = self.heap[index]
         self.heap[index] = new_value
-        if new_value < old_value:
+        if new_value > old_value:
             self.up(index)
         else:
             self.down(index)
 
     def get_high_priority(self):
-        if self.heap:
-            return self.heap[0]
+        if self.sorted_heap:
+            return self.sorted_heap[0]
         return None
 
 
@@ -142,22 +142,22 @@ def main():
     for value in data1:
         heap.insert(value)
         heap.display_heap()
-        pygame.time.delay(500)
+        pygame.time.delay(1000)
 
     # Alterações de Prioridade Conjunto 1
     heap.change_priority(3, 50)
     heap.display_heap()
-    pygame.time.delay(500)
+    pygame.time.delay(1000)
 
     heap.change_priority(1, 8)
     heap.display_heap()
-    pygame.time.delay(500)
+    pygame.time.delay(1000)
 
     # Remoções Conjunto 1
     for _ in range(3):
         heap.remove()
         heap.display_heap()
-        pygame.time.delay(500)
+        pygame.time.delay(1000)
 
     # Heapsort Conjunto 1
     heap.heap_sort()
@@ -165,6 +165,7 @@ def main():
     # elemento de alta prioridade 
     high_priority = heap.get_high_priority()
     display_text(f"Alta Prioridade: {high_priority}")
+    pygame.time.delay(1000)
 
     # Conjunto 2: Sequência Crescente
     display_text("Conjunto 2: Sequência Crescente")
@@ -172,22 +173,22 @@ def main():
     for value in data2:
         heap.insert(value)
         heap.display_heap()
-        pygame.time.delay(500)
+        pygame.time.delay(1000)
 
     # Alterações de Prioridade Conjunto 2
     heap.change_priority(4, 15)
     heap.display_heap()
-    pygame.time.delay(500)
+    pygame.time.delay(1000)
 
     heap.change_priority(8, 3)
     heap.display_heap()
-    pygame.time.delay(500)
+    pygame.time.delay(1000)
 
     # Remoções Conjunto 2
     for _ in range(5):
         heap.remove()
         heap.display_heap()
-        pygame.time.delay(500)
+        pygame.time.delay(1000)
 
     # Heapsort Conjunto 2
     heap.heap_sort()
@@ -202,22 +203,22 @@ def main():
     for value in data3:
         heap.insert(value)
         heap.display_heap()
-        pygame.time.delay(500)
+        pygame.time.delay(1000)
 
     # Alteração de Prioridade Conjunto 3
     heap.change_priority(2, 60)
     heap.display_heap()
-    pygame.time.delay(500)
+    pygame.time.delay(1000)
 
     heap.change_priority(5, 1)
     heap.display_heap()
-    pygame.time.delay(500)
+    pygame.time.delay(1000)
 
     # Remoções Conjunto 3
     for _ in range(3):
         heap.remove()
         heap.display_heap()
-        pygame.time.delay(500)
+        pygame.time.delay(1000)
 
     # Heapsort Conjunto 3
     heap.heap_sort()
@@ -232,22 +233,22 @@ def main():
     for value in data4:
         heap.insert(value)
         heap.display_heap()
-        pygame.time.delay(500)
+        pygame.time.delay(1000)
 
     # Alteração de Prioridade Conjunto 4
     heap.change_priority(7, 35)
     heap.display_heap()
-    pygame.time.delay(500)
+    pygame.time.delay(1000)
 
     heap.change_priority(10, 12)
     heap.display_heap()
-    pygame.time.delay(500)
+    pygame.time.delay(1000)
 
     # Remoções Conjunto 4
     for _ in range(4):
         heap.remove()
         heap.display_heap()
-        pygame.time.delay(500)
+        pygame.time.delay(1000)
 
     # Heapsort Conjunto 4
     heap.heap_sort()
